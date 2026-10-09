@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: analise-futebol
+    runtime: python
+    plan: starter
+    numInstances: 1
+    buildCommand: pip install .
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /health
+    disk:
+      name: football-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: DATABASE_PATH
+        value: /var/data/football.sqlite3
+      - key: API_FOOTBALL_KEY
+        sync: false
+      - key: LEAGUE_IDS
+        value: "71"
+      - key: TIMEZONE
+        value: America/Sao_Paulo
+      - key: ENABLE_ODDS
+        value: "false"
